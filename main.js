@@ -2,6 +2,7 @@ const express=require("express");
 const app=express();
 const mongoose=require('mongoose');
 const port=process.env.port||3000;
+const userRoute=require('./routes/user');
 const bodyParser=require('body-parser');
 /*-------Mongodb Database Connection-------*/
 mongoose.connect('mongodb://localhost:27017/KhasiList', {useNewUrlParser: true, useCreateIndex: true,useUnifiedTopology:true});
@@ -15,6 +16,10 @@ const khasiListRoute=require('./routes/khasi_category');
   app.use(bodyParser.urlencoded({extended:false}));  //extended:false means that it only support simple bodies for url encoded data.
   app.use(bodyParser.json());
 /*---------end----------*/
+
+/*---------UserRoute------------*/
+app.use('/user',userRoute);
+/*---------end-----------------*/
 
 /*--------cors error handling process-------*/
 app.use((req,res,next)=>{

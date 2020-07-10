@@ -3,26 +3,50 @@ const mongoose=require('mongoose');
 const userModel=require('../models/user.model');
 const router=express.Router();
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
 
 router.post('/login',(req,res,next)=>{
     userModel.find({username:req.body.userName})
     .exec()
-    .then(result=>{
-        if(result.length<1)
+    .then(user=>{
+        if(user.length<1)
         {
-            res.status(201).json({
+            res.status(404).json({
             
-                message:'User not found!!',
+                message:'Auth Failed!',
                
             })
         
         }else{
-        console.log(result)
-        res.status(201).json({
+            bcrypt.compare(req.body.password,user[0].password,function(err,result){
+                if(err){
+                    res.status(404).json({
             
-            message:'User found!!',
-            data:result,
-        })
+                        message:'Auth Failed!',
+                       
+                    }); 
+                }
+                if(result)
+                {
+                   var token= jwt.sign({
+                        username:user[0].username,
+                        userid:user[0]._id,
+                    },'secret',{ expiresIn:"1h"}
+                    )
+                    res.status(201).json({
+                        
+                        message:'User found!!',
+                        token:token,
+                    })
+                }else{
+                    res.status(404).json({
+            
+                        message:'Auth Failed!',
+                       
+                    }); 
+                }
+            })
+     
     }
     })
     .catch(err=>{

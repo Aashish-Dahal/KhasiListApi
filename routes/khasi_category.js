@@ -3,6 +3,7 @@ const khasiModel=require('../models/khasi.model');
 const { request } = require('express');
 const router=express.Router();
 var multer=require('multer');
+var checkAuth=require('../middleware/auth')
 // var upload=multer({dest:'public/uploads/'});
 
 const fileFilter=(req, file, cb)=>{
@@ -30,7 +31,7 @@ var storage = multer.diskStorage({
 
 /*-----Handling Get requests----------*/
 
-router.get('/',(req,res,next)=>{
+router.get('/',checkAuth,(req,res,next)=>{
     khasiModel.find()
     .select('_id title category short_description estimated_weight color daat owner_name address primary_contact_no secondary_contact_no age khasiImage')
     .exec()
@@ -52,8 +53,8 @@ router.get('/',(req,res,next)=>{
 
 /*-----Handling Post requests----------*/
 
-router.post('/',upload.single('khasiImage'),(req,res,next)=>{
-    console.log(req.file);
+router.post('/',upload.single('khasiImage'),checkAuth,(req,res,next)=>{
+    console.log(req.userData);
     const khasiLists=new khasiModel({
           title:req.body.title,
           category:req.body.category,

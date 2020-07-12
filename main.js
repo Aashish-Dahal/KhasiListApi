@@ -1,7 +1,7 @@
 const express=require("express");
 const app=express();
 const mongoose=require('mongoose');
-const port=process.env.port||3000;
+const port=process.env.PORT||3000;
 const userRoute=require('./routes/user');
 const bodyParser=require('body-parser');
 /*-------Mongodb Database Connection-------*/

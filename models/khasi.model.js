@@ -46,7 +46,7 @@ const khasiSchema=mongoose.Schema({
     },
     khasiImage:{
         type:String,
-        required:true,
+        
     }
 });
 module.exports=mongoose.model('KhasiLists',khasiSchema);

@@ -31,7 +31,7 @@ var storage = multer.diskStorage({
 
 /*-----Handling Get requests----------*/
 
-router.get('/',checkAuth,(req,res,next)=>{
+router.get('/',(req,res,next)=>{
     khasiModel.find()
     .select('_id title category short_description estimated_weight color daat owner_name address primary_contact_no secondary_contact_no age khasiImage')
     .exec()
@@ -53,7 +53,8 @@ router.get('/',checkAuth,(req,res,next)=>{
 
 /*-----Handling Post requests----------*/
 
-router.post('/',upload.single('khasiImage'),checkAuth,(req,res,next)=>{
+// router.post('/',upload.single('khasiImage'),checkAuth,(req,res,next)=>{
+    router.post('/',upload.single('khasiImage'),(req,res,next)=>{
     console.log(req.userData);
     const khasiLists=new khasiModel({
           title:req.body.title,
